@@ -101,6 +101,239 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
 keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
+-- Set <space> as the leader key
+-- See `:help mapleader`
+--  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
+-- disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- ==================================================================== --
+--                          Plugin Manager                              --
+-- ==================================================================== --
+
+-- Install package manager
+--    `:help lazy.nvim.txt` for more info
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system {
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
+    lazypath,
+  }
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- NOTE: Here is where you install your plugins.
+--  You can configure plugins using the `config` key.
+require('lazy').setup({
+  -- Git related plugins
+  'tpope/vim-fugitive', -- Use Git from neovim with :Git
+  'tpope/vim-rhubarb', -- Same, but for GitHub
+
+  'windwp/nvim-autopairs', -- Open and close "(), {}, etc." automatically.
+
+  'numToStr/Comment.nvim', -- Comment code with shortcuts
+  'JoosepAlviste/nvim-ts-context-commentstring', -- Change comment type for JS files
+
+  'kyazdani42/nvim-web-devicons', -- Icons for Nvim Tree
+
+  'kyazdani42/nvim-tree.lua', -- Custom File Explorer
+
+  'akinsho/bufferline.nvim', -- Top bar for buffers (Buffer = file loaded in memory)
+  'moll/vim-bbye', -- Bdelete command
+
+  'akinsho/toggleterm.nvim', -- Toggle a terminal
+
+  { -- LSP Configuration & Plugins
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      -- Automatically install LSPs to stdpath for neovim
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+
+      -- Useful status updates for LSP
+      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+      { 'j-hui/fidget.nvim', opts = {} },
+
+      -- Additional lua configuration, makes nvim stuff amazing!
+      'folke/neodev.nvim',
+    },
+  },
+
+  { -- Autocompletion / Snippets
+    'hrsh7th/nvim-cmp',
+    dependencies = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline', 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' },
+  },
+
+  -- Shortcuts sheat sheet when starting a key sequence
+  { 'folke/which-key.nvim', opts = {} },
+
+  { -- Adds git releated signs to the gutter, as well as utilities for managing changes
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      -- See `:help gitsigns.txt`
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+    },
+  },
+
+  {
+    'glepnir/dashboard-nvim', -- Home Screen
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        theme = 'hyper',
+        config = {
+          week_header = {
+            enable = true,
+          },
+          project = { enable = false, },
+          footer = {},
+          shortcut = {
+            { 
+              desc = ' Update', 
+              group = '@property', 
+              action = 'Lazy update', 
+              key = 'u' 
+            },
+            {
+              icon = ' ',
+              icon_hl = '@variable',
+              desc = 'Find Files',
+              group = 'Label',
+              action = 'Telescope find_files',
+              key = 'f',
+            },
+            {
+              icon = ' ',
+              icon_hl = '@variable',
+              desc = 'Browse Keymaps',
+              group = 'Label',
+              action = 'Telescope keymaps',
+              key = 'i',
+            },
+            {
+              icon = ' ',
+              icon_hl = '@variable',
+              desc = 'Language Servers',
+              group = 'Label',
+              action = 'Mason',
+              key = 'l',
+            },
+          },
+        },
+      }
+    end,
+    dependencies = {}
+  },
+
+  { -- Color Theme
+    'Mofiqul/dracula.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'dracula'
+    end,
+  },
+
+  { -- Set lualine as statusline
+    'nvim-lualine/lualine.nvim',
+    -- See `:help lualine.txt`
+    opts = {
+      options = {
+        icons_enabled = true,
+        theme = 'dracula',
+        component_separators = { left = '', right = ''},
+        section_separators = { left = '', right = ''},
+        disabled_filetypes = {
+          statusline = {},
+          winbar = {},
+        },
+        -- disabled_filetypes = { 'packer', 'NvimTree' },
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = false,
+        refresh = {
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000,
+        }
+      },
+      sections = {
+        lualine_a = {'mode'},
+        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_c = {'filename'},
+        lualine_x = {'encoding', 'fileformat', 'filetype'},
+        lualine_y = {'progress'},
+        lualine_z = {'location'}
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {'filename'},
+        lualine_x = {'location'},
+        lualine_y = {},
+        lualine_z = {}
+      },
+      tabline = {},
+      winbar = {},
+      inactive_winbar = {},
+      extensions = {'fugitive', 'man', 'nvim-tree', 'toggleterm'}
+    },
+  },
+
+  { -- Add indentation guides even on blank lines
+    'lukas-reineke/indent-blankline.nvim',
+    -- Enable `lukas-reineke/indent-blankline.nvim`
+    -- See `:help indent_blankline.txt`
+    opts = {
+      char = '┊',
+      show_trailing_blankline_indent = false,
+    },
+  },
+
+  -- "gc" to comment visual regions/lines
+  { 'numToStr/Comment.nvim', opts = {} },
+
+  -- Fuzzy Finder (files, lsp, etc)
+  { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim'} },
+
+  -- Fuzzy Finder Algorithm which requires local dependencies to be built.
+  -- Only load if `make` is available. Make sure you have the system
+  -- requirements installed.
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    -- NOTE: If you are having trouble with this installation,
+    --       refer to the README for telescope-fzf-native for more instructions.
+    build = 'make',
+    cond = function()
+      return vim.fn.executable 'make' == 1
+    end,
+  },
+
+  { -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
+    config = function()
+      pcall(require('nvim-treesitter.install').update { with_sync = true })
+    end,
+  },
+
+}, {})
+
 -- ==================================================================== --
 --                          Plugins                                     --
 -- ==================================================================== --
