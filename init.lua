@@ -94,18 +94,7 @@ keymap("v", "<A-j>", ":m .+1<CR>==", opts)
 keymap("v", "<A-k>", ":m .-2<CR>==", opts)
 keymap("v", "p", '"_dP', opts)
 
--- Visual Block --
--- Move text up and down
-keymap("x", "J", ":move '>+1<CR>gv-gv", opts)
-keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
-keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
-keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
-
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+keymap("n", "<leader>f", ":Telescope find_files<CR>", opts)
 
 -- disable netrw
 vim.g.loaded_netrw = 1
@@ -335,121 +324,110 @@ require('lazy').setup({
 }, {})
 
 -- ==================================================================== --
---                          Nvim - Tree                                 --
+--                          Plugins configuration                       --
 -- ==================================================================== --
 
-local remap = require('user.util.remap')
-local M = {}
+-- ==================================================================== --
+--                          Telescope                                   --
+-- ==================================================================== --
 
-function M.setup()
-  local nvim_tree_ok, tree = pcall(require, "nvim-tree")
-
-  if not nvim_tree_ok then
-    vim.notify("Could not load nvim-tree.lua")
-    return
-  end
-
-  local config_status_ok, nvim_tree_config = pcall(require, "nvim-tree.config")
-  if not config_status_ok then
-    return
-  end
-
-  local tree_cb = nvim_tree_config.nvim_tree_callback
-
-  tree.setup {
-    disable_netrw = true,
-    hijack_netrw = true,
-    hijack_cursor = true,
-    update_focused_file = {
-      enable = true,
-      update_cwd = false,
-    },
-    live_filter = {
-      prefix = "F",
-      always_show_folders = false,
-    },
-    ignore_ft_on_setup = {
-      "gitcommit",
-    },
-    filters = {
-      custom = {
-        "^.git$",
-      }
-    },
-    hijack_directories = {
-      enable = true,
-      auto_open = true,
-    },
-    diagnostics = {
-      enable = true,
-      icons = {
-        hint = "",
-        info = "",
-        warning = "",
-        error = "",
-      },
-    },
-    view = {
-      -- number = true,
-      width = 50,
-      side = "right",
-      signcolumn = "yes",
-      mappings = {
-        list = {
-          { key = { "l", "<CR>", "o" }, cb = tree_cb "edit" },
-          { key = "h", cb = tree_cb "close_node" },
-          { key = "v", cb = tree_cb "vsplit" },
-        },
-      },
-    },
-    renderer = {
-      root_folder_modifier = ":t",
-      special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md", "package.json" },
-      highlight_opened_files = 'all',
-      indent_markers = {
-        enable = true,
-        icons = {
-          corner = "└",
-          edge = "│",
-          item = "│",
-          none = " ",
-        },
-      },
-      icons = {
-        glyphs = {
-          default = "",
-          symlink = "",
-          folder = {
-            arrow_open = "",
-            arrow_closed = "",
-            default = "",
-            open = "",
-            empty = "",
-            empty_open = "",
-            symlink = "",
-            symlink_open = "",
-          },
-          git = {
-            modified = "",
-            unstaged = "",
-            staged = "S",
-            unmerged = "",
-            renamed = "➜",
-            untracked = "U",
-            deleted = "",
-            ignored = "◌",
-          },
-        },
-      }
-    }
-  }
-
-  remap.nmap('<leader>e', tree.toggle, 'Toggle Nvim Tree', true)
+local status_ok, telescope = pcall(require, "telescope")
+if not status_ok then
+  return
 end
 
-return M
+local actions = require "telescope.actions"
+
+telescope.setup {
+  defaults = {
+
+    prompt_prefix = " ",
+    selection_caret = " ",
+    path_display = { "smart" },
+
+    mappings = {
+      i = {
+        ["<C-n>"] = actions.cycle_history_next,
+        ["<C-p>"] = actions.cycle_history_prev,
+
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+
+        ["<C-c>"] = actions.close,
+
+        ["<Down>"] = actions.move_selection_next,
+        ["<Up>"] = actions.move_selection_previous,
+
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
+
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
+
+        ["<PageUp>"] = actions.results_scrolling_up,
+        ["<PageDown>"] = actions.results_scrolling_down,
+
+        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<C-l>"] = actions.complete_tag,
+        ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+      },
+
+      n = {
+        ["<esc>"] = actions.close,
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
+
+        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+
+        ["j"] = actions.move_selection_next,
+        ["k"] = actions.move_selection_previous,
+        ["H"] = actions.move_to_top,
+        ["M"] = actions.move_to_middle,
+        ["L"] = actions.move_to_bottom,
+
+        ["<Down>"] = actions.move_selection_next,
+        ["<Up>"] = actions.move_selection_previous,
+        ["gg"] = actions.move_to_top,
+        ["G"] = actions.move_to_bottom,
+
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
+
+        ["<PageUp>"] = actions.results_scrolling_up,
+        ["<PageDown>"] = actions.results_scrolling_down,
+
+        ["?"] = actions.which_key,
+      },
+    },
+  },
+  -- pickers = {
+    -- Default configuration for builtin pickers goes here:
+    -- picker_name = {
+    --   picker_config_key = value,
+    --   ...
+    -- }
+    -- Now the picker_config_key will be applied every time you call this
+    -- builtin picker
+  -- },
+  extensions = {
+    -- Your extension configuration goes here:
+    -- extension_name = {
+    --   extension_config_key = value,
+    -- }
+    -- please take a look at the readme of the extension you want to configure
+  },
+}
 
 -- ==================================================================== --
---                          Plugins                                     --
+--                          Nvim - Tree                                 --
 -- ==================================================================== --
-
