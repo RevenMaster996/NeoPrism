@@ -94,7 +94,11 @@ keymap("v", "<A-j>", ":m .+1<CR>==", opts)
 keymap("v", "<A-k>", ":m .-2<CR>==", opts)
 keymap("v", "p", '"_dP', opts)
 
-keymap("n", "<leader>f", ":Telescope find_files<CR>", opts)
+keymap("n", "<leader>e", ":NvimTreeToggle<cr>", { desc = "NvimTree" })
+keymap("n", "<leader>s", ":Telescope find_files<cr>", { desc = "Telescope Find Files (search)" })
+keymap("n", "<leader>g", "<cmd>Telescope live_grep<cr>", { desc = "Telescope Live Grep" })
+keymap("n", "<leader>q", "<cmd>Bdelete<cr>", { desc = "Close Selected Buffer" })
+keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.format { async = true }<cr>", { desc = "Code Format" })
 
 -- disable netrw
 vim.g.loaded_netrw = 1
@@ -147,11 +151,8 @@ require('lazy').setup({
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
 
-      -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
-      -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
   },
@@ -178,55 +179,6 @@ require('lazy').setup({
     },
   },
 
-  {
-    'glepnir/dashboard-nvim', -- Home Screen
-    event = 'VimEnter',
-    config = function()
-      require('dashboard').setup {
-        theme = 'hyper',
-        config = {
-          week_header = {
-            enable = true,
-          },
-          project = { enable = false, },
-          footer = {},
-          shortcut = {
-            { 
-              desc = ' Update', 
-              group = '@property', 
-              action = 'Lazy update', 
-              key = 'u' 
-            },
-            {
-              icon = ' ',
-              icon_hl = '@variable',
-              desc = 'Find Files',
-              group = 'Label',
-              action = 'Telescope find_files',
-              key = 'f',
-            },
-            {
-              icon = ' ',
-              icon_hl = '@variable',
-              desc = 'Browse Keymaps',
-              group = 'Label',
-              action = 'Telescope keymaps',
-              key = 'i',
-            },
-            {
-              icon = ' ',
-              icon_hl = '@variable',
-              desc = 'Language Servers',
-              group = 'Label',
-              action = 'Mason',
-              key = 'l',
-            },
-          },
-        },
-      }
-    end,
-    dependencies = {}
-  },
 
   { -- Color Theme
     'Mofiqul/dracula.nvim',
@@ -284,8 +236,7 @@ require('lazy').setup({
 
   { -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
+
     opts = {
       char = '┊',
       show_trailing_blankline_indent = false,
@@ -298,13 +249,9 @@ require('lazy').setup({
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim'} },
 
-  -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-  -- Only load if `make` is available. Make sure you have the system
-  -- requirements installed.
   {
     'nvim-telescope/telescope-fzf-native.nvim',
-    -- NOTE: If you are having trouble with this installation,
-    --       refer to the README for telescope-fzf-native for more instructions.
+
     build = 'make',
     cond = function()
       return vim.fn.executable 'make' == 1
@@ -429,5 +376,31 @@ telescope.setup {
 }
 
 -- ==================================================================== --
---                          Nvim - Tree                                 --
+--                          Treesitter                                  --
 -- ==================================================================== --
+
+-- See `:help nvim-treesitter`
+require('nvim-treesitter.configs').setup {
+  ensure_installed = {'c', 'rust', 'lua', 'vim', 'bash', 'markdown'},
+  sync_install = false, 
+  ignore_install = { "" }, -- List of parsers to ignore installing
+  autopairs = { enable = true, },
+  highlight = {
+    enable = true, -- false will disable the whole extension
+    disable = { "" }, -- list of language that will be disabled
+    additional_vim_regex_highlighting = true,
+  },
+  indent = { enable = true, disable = { "yaml" } },
+}
+
+-- ==================================================================== --
+--                          Nvim-tree                                   --
+-- ==================================================================== --
+
+require("nvim-tree").setup { -- BEGIN_DEFAULT_OPTS
+view = {
+  width = 30,
+  side = "right",
+  }
+}
+-- Falta comando para alternar entre buffers
