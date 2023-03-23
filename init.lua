@@ -66,8 +66,8 @@ keymap("n", "<C-l>", "<C-w>l", opts)
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)
 keymap("n", "<C-Down>", ":resize +2<CR>", opts)
-keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
-keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
+keymap("n", "<C-Right>", ":vertical resize -2<CR>", opts)
+keymap("n", "<C-Left>", ":vertical resize +2<CR>", opts)
 
 -- Navigate buffers with `control + j/k`
 keymap('n', '<C-j>', ':bnext<CR>', opts)
@@ -92,6 +92,25 @@ keymap("n", "<leader>s", ":Telescope find_files<cr>", { desc = "Telescope Find F
 keymap("n", "<leader>g", "<cmd>Telescope live_grep<cr>", { desc = "Telescope Live Grep" })
 keymap("n", "<leader>q", "<cmd>Bdelete<cr>", { desc = "Close Selected Buffer" })
 keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.format { async = true }<cr>", { desc = "Code Format" })
+
+-- Open and Switch between windows
+-- Switch to the window above the current one
+keymap('n', '<C-k>', '<C-w>k', opts)
+
+-- Switch to the window below the current one
+keymap('n', '<C-j>', '<C-w>j', opts)
+
+-- Switch to the window to the left of the current one
+keymap('n', '<C-h>', '<C-w>h', opts)
+
+-- Switch to the window to the right of the current one
+keymap('n', '<C-l>', '<C-w>l', opts)
+
+-- Open a new vertical split window to the right
+keymap('n', '<C-n>', ':vsplit<CR>', opts)
+
+-- Open a new horizontal split window below
+keymap('n', '<C-m>', ':split<CR>', opts)
 
 -- disable netrw
 vim.g.loaded_netrw = 1
