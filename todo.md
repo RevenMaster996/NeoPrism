@@ -1,7 +1,7 @@
 # Início
 - [x] Plugin Manager
 - [x] Escolher plugins
-- [ ] Options
+- [x] Options
 - [x] Keymaps parte 1
 - [ ] Config plugins
 - [ ] Keymaps parte 2
@@ -10,9 +10,9 @@
 - [ ] E viveram felizes para sempre
 
 ## Config Plugins
-- [ ] Telescope
-- [ ] Treesitter
-- [ ] NvimTree
+- [x] Telescope
+- [x] Treesitter
+- [x] NvimTree
 - [ ] Bufferline
 - [ ] LSP / CMP (deixa pro fim - mais complicado)
 - [ ] Autopairs ????
