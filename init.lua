@@ -55,7 +55,7 @@ vim.g.maplocalleader = " "
 --   insert_mode = "i",
 --   visual_mode = "v",
 --   command_mode = "c",
---   visual_block_mode = "q",
+--   visual_block_mode = "Fn + q",
 
 -- Normal --
 -- Better window navigation
@@ -84,6 +84,7 @@ keymap("i", "kj", "<ESC>", opts)
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
+-- Plugins interaction
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", { desc = "NvimTree" })
 keymap("n", "<leader>s", ":Telescope find_files<cr>", { desc = "Telescope Find Files (search)" })
 keymap("n", "<leader>g", "<cmd>Telescope live_grep<cr>", { desc = "Telescope Live Grep" })
@@ -138,7 +139,8 @@ require('lazy').setup({
   'akinsho/toggleterm.nvim', -- Toggle a terminal
 
   { -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
+      'neovim/nvim-lspconfig',
+    
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
@@ -151,8 +153,16 @@ require('lazy').setup({
   },
 
   { -- Autocompletion / Snippets
-    'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline', 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' },
+      'hrsh7th/nvim-cmp',
+    
+    dependencies = { 
+      'hrsh7th/cmp-buffer', 
+      'hrsh7th/cmp-path', 
+      'hrsh7th/cmp-cmdline', 
+      'hrsh7th/cmp-nvim-lsp', 
+      'L3MON4D3/LuaSnip', 
+      'saadparwaiz1/cmp_luasnip', 
+      'rafamadriz/friendly-snippets' },
   },
 
   -- Shortcuts sheat sheet when starting a key sequence
@@ -429,9 +439,9 @@ require("bufferline").setup{
     offsets = { 
     { 
       filetype = "NvimTree", 
-      text = "File Explorer" | function ,
-      text_align = "center" 
-      separator = true 
+      text = "File Explorer",
+      text_align = "center", 
+      separator = true,
     } 
     },
     

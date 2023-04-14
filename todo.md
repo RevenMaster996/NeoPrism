@@ -19,5 +19,5 @@
 - [ ] Comments
 - [ ] Toggle term
 - [ ] Dashboard
-- [ ] Theme
-- [ ] Git
+- [x] Theme
+- [x] Git
