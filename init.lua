@@ -88,9 +88,10 @@ keymap("v", ">", ">gv", opts)
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", { desc = "NvimTree" })
 keymap("n", "<leader>s", ":Telescope find_files<cr>", { desc = "Telescope Find Files (search)" })
 keymap("n", "<leader>g", "<cmd>Telescope live_grep<cr>", { desc = "Telescope Live Grep" })
-keymap("n", "<leader>q", "<cmd>Bdelete<cr>", { desc = "Close Selected Buffer" })
 keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.format { async = true }<cr>", { desc = "Code Format" })
-
+keymap("n", "<leader>q", "<cmd>Bdelete<cr>", { desc = "Close Selected Buffer" })
+keymap("n", "<leader>p", "<cmd>bp<cr>", { desc = "Open Previous Buffer" })
+keymap("n", "<leader>n", "<cmd>bn<cr>", { desc = "Open next Buffer" })
 
 -- disable netrw
 vim.g.loaded_netrw = 1
