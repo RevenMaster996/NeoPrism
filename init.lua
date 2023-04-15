@@ -93,6 +93,16 @@ keymap("n", "<leader>q", "<cmd>Bdelete<cr>", { desc = "Close Selected Buffer" })
 keymap("n", "<leader>p", "<cmd>bp<cr>", { desc = "Open Previous Buffer" })
 keymap("n", "<leader>n", "<cmd>bn<cr>", { desc = "Open next Buffer" })
 
+keymap("n", "<leader>1", "<cmd>BufferLineGoToBuffer 1<cr>", { desc = "Open Buffer 1" })
+keymap("n", "<leader>2", "<cmd>BufferLineGoToBuffer 2<cr>", { desc = "Open Buffer 2" })
+keymap("n", "<leader>3", "<cmd>BufferLineGoToBuffer 3<cr>", { desc = "Open Buffer 3" })
+keymap("n", "<leader>4", "<cmd>BufferLineGoToBuffer 4<cr>", { desc = "Open Buffer 4" })
+keymap("n", "<leader>5", "<cmd>BufferLineGoToBuffer 5<cr>", { desc = "Open Buffer 5" })
+keymap("n", "<leader>6", "<cmd>BufferLineGoToBuffer 6<cr>", { desc = "Open Buffer 6" })
+keymap("n", "<leader>7", "<cmd>BufferLineGoToBuffer 7<cr>", { desc = "Open Buffer 7" })
+keymap("n", "<leader>8", "<cmd>BufferLineGoToBuffer 8<cr>", { desc = "Open Buffer 8" })
+keymap("n", "<leader>9", "<cmd>BufferLineGoToBuffer 9<cr>", { desc = "Open Buffer 9" })
+
 -- disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
