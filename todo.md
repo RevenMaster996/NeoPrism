@@ -15,7 +15,7 @@
 - [x] NvimTree
 - [ ] Bufferline
 - [ ] LSP / CMP (deixa pro fim - mais complicado)
-- [ ] Autopairs ????
+- [x] Autopairs ????
 - [ ] Comments
 - [ ] Toggle term
 - [ ] Dashboard
