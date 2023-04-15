@@ -5,7 +5,8 @@ fn main() {
 fn main() {
     println!("Hello, world");
 }
-
+(){}[]()ijijijijijijxisojxijsxoijoicjwdocijoxowjoiwjdiocxjwodicjowi:w
+i
 /*
 *
 *

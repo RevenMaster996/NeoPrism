@@ -432,9 +432,10 @@ require("bufferline").setup{
     middle_mouse_command = nil, 
 
     indicator = {
-      style = 'underline',
-	  -- icon = '|', -- If style it's an icon this can be used as a default
-    },
+      style = 'icon',
+	    icon = '|', -- If style it's an icon this can be used as a default
+   },
+
     buffer_close_icon = "",
     modified_icon = "●",
     close_icon = "",
@@ -455,7 +456,7 @@ require("bufferline").setup{
       separator = true,
     } 
     },
-    
+
     show_buffer_icons = true,
     show_buffer_close_icons = true,
     show_close_icon = true,
@@ -563,5 +564,5 @@ require("bufferline").setup{
       fg = { attribute = "fg", highlight = "LspDiagnosticsDefaultHint" },
       bg = { attribute = "bg", highlight = "Normal" },
     },
-  },
+   },
 }
