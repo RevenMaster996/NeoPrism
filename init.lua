@@ -256,7 +256,7 @@ require('lazy').setup({
     },
   },
 
-  -- "gc" to comment visual regions/lines
+  -- "gcc" or "gc" to comment visual regions/lines and "gb" to block comment
   { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
