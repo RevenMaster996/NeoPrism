@@ -13,10 +13,10 @@
 - [x] Telescope
 - [x] Treesitter
 - [x] NvimTree
-- [ ] Bufferline
+- [x] Bufferline
 - [ ] LSP / CMP (deixa pro fim - mais complicado)
 - [x] Autopairs ????
-- [ ] Comments
+- [x] Comments
 - [ ] Toggle term
 - [ ] Dashboard
 - [x] Theme
