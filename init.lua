@@ -58,7 +58,7 @@ vim.g.maplocalleader = " "
 --   visual_block_mode = "Fn + q",
 
 -- Normal --
--- Better window navigation
+-- Switch between buffers
 keymap("n", "<C-h>", "<C-w>h", opts)
 keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
@@ -85,12 +85,13 @@ keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
 -- Create Split
-keymap("n", "<leader>h", ":horizontal split<cr>", { desc = "Horizontal Window" })
-keymap("n", "<leader>v", ":vertical split<cr>", { desc = "Vertical Window" })
+keymap("n", "<leader>h", ":horizontal split<cr>", { desc = "Horizontal Split" })
+keymap("n", "<leader>v", ":vertical split<cr>", { desc = "Vertical Split" })
 
 -- Close Split
-keymap("n", "<leader>c", "<C-w>q>", { desc = "Close Window" })
-keymap("n", "<leader>a", "<C-w>o>", { desc = "Close all Windows" })
+keymap("n", "<leader>c", "<C-w>q>", { desc = "Close Split" })
+-- Close all Splits 
+keymap("n", "<leader>a", "<C-w>o>", { desc = "Close all Splits"})
 
 -- Plugins interaction
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", { desc = "NvimTree" })
