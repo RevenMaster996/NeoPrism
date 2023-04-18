@@ -84,6 +84,14 @@ keymap("i", "kj", "<ESC>", opts)
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
+-- Create Split
+keymap("n", "<leader>h", ":horizontal split<cr>", { desc = "Horizontal Window" })
+keymap("n", "<leader>v", ":vertical split<cr>", { desc = "Vertical Window" })
+
+-- Close Split
+keymap("n", "<leader>c", "<C-w>q>", { desc = "Close Window" })
+keymap("n", "<leader>a", "<C-w>o>", { desc = "Close all Windows" })
+
 -- Plugins interaction
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", { desc = "NvimTree" })
 keymap("n", "<leader>s", ":Telescope find_files<cr>", { desc = "Telescope Find Files (search)" })
@@ -93,6 +101,7 @@ keymap("n", "<leader>q", "<cmd>Bdelete<cr>", { desc = "Close Selected Buffer" })
 keymap("n", "<leader>p", "<cmd>bp<cr>", { desc = "Open Previous Buffer" })
 keymap("n", "<leader>n", "<cmd>bn<cr>", { desc = "Open next Buffer" })
 
+-- Open a specific buffer
 keymap("n", "<leader>1", "<cmd>BufferLineGoToBuffer 1<cr>", { desc = "Open Buffer 1" })
 keymap("n", "<leader>2", "<cmd>BufferLineGoToBuffer 2<cr>", { desc = "Open Buffer 2" })
 keymap("n", "<leader>3", "<cmd>BufferLineGoToBuffer 3<cr>", { desc = "Open Buffer 3" })
@@ -102,6 +111,19 @@ keymap("n", "<leader>6", "<cmd>BufferLineGoToBuffer 6<cr>", { desc = "Open Buffe
 keymap("n", "<leader>7", "<cmd>BufferLineGoToBuffer 7<cr>", { desc = "Open Buffer 7" })
 keymap("n", "<leader>8", "<cmd>BufferLineGoToBuffer 8<cr>", { desc = "Open Buffer 8" })
 keymap("n", "<leader>9", "<cmd>BufferLineGoToBuffer 9<cr>", { desc = "Open Buffer 9" })
+
+-- Toggle term
+-- Avoid keybinding conflicts
+function _G.set_terminal_keymaps()
+  local opts = {noremap = true}
+  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+end
+
 
 -- disable netrw
 vim.g.loaded_netrw = 1
@@ -289,6 +311,21 @@ require('lazy').setup({
 -- ==================================================================== --
 
 -- ==================================================================== --
+--                          Dashboard                                   --
+-- ==================================================================== --
+
+-- {
+--   'glepnir/dashboard-nvim',
+--   event = 'VimEnter',
+--   config = function()
+--     require('dashboard').setup {
+--       theme = 'hyper',
+--     }
+--   end,
+--   dependencies = { {'nvim-tree/nvim-web-devicons'}}
+-- }
+
+-- ==================================================================== --
 --                          Telescope                                   --
 -- ==================================================================== --
 
@@ -371,22 +408,6 @@ telescope.setup {
       },
     },
   },
-  -- pickers = {
-    -- Default configuration for builtin pickers goes here:
-    -- picker_name = {
-    --   picker_config_key = value,
-    --   ...
-    -- }
-    -- Now the picker_config_key will be applied every time you call this
-    -- builtin picker
-  -- },
-  extensions = {
-    -- Your extension configuration goes here:
-    -- extension_name = {
-    --   extension_config_key = value,
-    -- }
-    -- please take a look at the readme of the extension you want to configure
-  },
 }
 
 -- ==================================================================== --
@@ -417,7 +438,6 @@ view = {
   side = "right",
   }
 }
--- Falta comando para alternar entre buffers
 
 -- ==================================================================== --
 --                         Bufferline                                   --
@@ -572,3 +592,35 @@ require("bufferline").setup{
 -- ==================================================================== --
 
 require("nvim-autopairs").setup {}
+
+-- ==================================================================== --
+--                          Toggle term                                 --
+-- ==================================================================== --
+
+local status_ok, toggleterm = pcall(require, "toggleterm")
+if not status_ok then
+	return
+end
+
+toggleterm.setup({
+	size = 10,
+	open_mapping = [[<c-t>]], -- CTRL + t to open term
+	hide_numbers = true,
+	shade_filetypes = {},
+	shade_terminals = true,
+	shading_factor = 2,
+	start_in_insert = true,
+	insert_mappings = true,
+	persist_size = true,
+	direction = "horizontal", -- float, vertical...
+	close_on_exit = true,
+	shell = vim.o.shell,
+	float_opts = {
+		border = "curved",
+		winblend = 0,
+		highlights = {
+			border = "Normal",
+			background = "Normal",
+		},
+	},
+})
