@@ -338,58 +338,58 @@ require('lazy').setup({
 -- ==================================================================== --
 --                          Dashboard                                   --
 -- ==================================================================== --
-local g = vim.g
-
 local status_ok, dashboard = pcall(require, "dashboard-nvim")
 if not status_ok then
   return
 end
 
- dashboard.setup {
-   g.dashboard_custom_header = {
-     '',
-     '',
-     '',
-     '',
-     '',
-     '',
- '| \ | | ___  ___ |  _ \ _ __(_)___ _ __ ___  ',
-' |  \| |/ _ \/ _ \| |_) | '__| / __| '_ ` _ \ ',
-' | |\  |  __/ (_) |  __/| |  | \__ \ | | | | | ',
-' |_| \_|\___|\___/|_|   |_|  |_|___/_| |_| |_| ',                                           
-     '',
-     '',
-     '',
-   }
-
-  g.dashboard_default_executive = 'telescope'
-
-  g.dashboard_session_directory = vim.fn.stdpath('data') .. '/sessions'
-
-  g.dashboard_custom_section = {
-    find_file = {
-      description = { icons.file1 .. ' Find File           <leader>ff' },
-      command = 'lua require("cosmic.plugins.telescope.mappings").project_files()',
+require('dashboard-nvim').setup {
+  theme = 'doom',
+  config = {
+    header = {     
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '███╗   ██╗███████╗ ██████╗ ██████╗ ██████╗ ██╗███████╗███╗   ███╗',
+    '████╗  ██║██╔════╝██╔═══██╗██╔══██╗██╔══██╗██║██╔════╝████╗ ████║',
+    '██╔██╗ ██║█████╗  ██║   ██║██████╔╝██████╔╝██║███████╗██╔████╔██║',
+    '██║╚██╗██║██╔══╝  ██║   ██║██╔═══╝ ██╔══██╗██║╚════██║██║╚██╔╝██║',
+    '██║ ╚████║███████╗╚██████╔╝██║     ██║  ██║██║███████║██║ ╚═╝ ██║',
+    '╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚═╝     ╚═╝',
+    '',                                                             
+    '',                                           
+    '',
+    '',
+    '',
+  }, --your header
+    
+  center = {
+      {
+        icon = ' ',
+        icon_hl = 'Title',
+        desc = 'Find File           ',
+        desc_hl = 'String',
+        key = 'b',
+        keymap = 'SPC f f',
+        key_hl = 'Number',
+        action = 'lua print(2)'
+      },
+      {
+        icon = ' ',
+        desc = 'Find Dotfiles',
+        key = 'f',
+        keymap = 'SPC f d',
+        action = 'lua print(3)'
+      },
     },
-    file_explorer = {
-      description = { icons.file2 .. ' File Manager        <C-n>     ' },
-      command = 'NvimTreeToggle',
-    },
-    find_string = {
-      description = { icons.word .. ' Grep String         <leader>fs' },
-      command = 'Telescope grep_string',
-    },
-    last_session = {
-      description = { icons.clock .. ' Load Session        <leader>sl' },
-      command = 'lua vim.cmd(":silent RestoreSession")',
-    },
+    footer = {{ '💫 github.com/RevenMaster996/NeoPrism' }}  
   }
-
-  g.dashboard_custom_footer = { '💫 github.com/RevenMaster996/NeoPrism' }
-end,
-event = 'VimEnter',
-enabled = not vim.tbl_contains(user_config.disable_builtin_plugins, 'dashboard'),
 }
+dependencies = { {'nvim-tree/nvim-web-devicons'}}
 
 -- ==================================================================== --
 --                          Telescope                                   --

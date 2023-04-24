@@ -5,6 +5,7 @@
 - [x] Keymaps parte 1
 - [ ] Config plugins
 - [ ] Keymaps parte 2
+- [ ] Atualizar e melhorar o site
 - [ ] Testar
 - [ ] Arranjar uma vítima para testar tmb
 - [ ] E viveram felizes para sempre
