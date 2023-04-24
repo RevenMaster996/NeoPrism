@@ -2,36 +2,39 @@
 --                          OPTIONS                                     --
 -- ==================================================================== --
 -- See `:help vim.o`
-vim.o.backup = false -- creates a backup file
-vim.o.conceallevel = 0 -- so that `` is visible in markdown files
-vim.o.pumheight = 10 -- pop up menu height
-vim.o.showtabline = 2 -- always show tabs
-vim.o.smartindent = true -- make indenting smarter again
-vim.o.hlsearch = true -- Set highlight on search
-vim.o.writebackup = false -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
-vim.o.number = true -- Make line numbers default
-vim.o.expandtab = true -- convert tabs to spaces
-vim.o.mouse = 'a' -- Enable mouse mode
-vim.o.clipboard = 'unnamedplus' -- Sync clipboard between OS and Neovim.
-vim.o.breakindent = true -- Enable break indent
-vim.o.undofile = true -- Save undo history
-vim.o.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
-vim.o.smartcase = true
-vim.o.shiftwidth = 2 -- the number of spaces inserted for each indentation
-vim.o.tabstop = 2 -- insert 2 spaces for a tab
-vim.o.cursorline = true -- highlight the current line
-vim.o.relativenumber = true -- set relative numbered lines
-vim.o.scrolloff = 8
-vim.o.sidescrolloff = 8
-vim.o.guifont = "FiraCode Nerd Font"
+
+local opt = vim.opt
+
+opt.backup = false            -- creates a backup file
+opt.conceallevel = 0          -- so that `` is visible in markdown files
+opt.pumheight = 10            -- pop up menu height
+opt.showtabline = 2           -- always show tabs
+opt.smartindent = true        -- make indenting smarter again
+opt.hlsearch = true           -- Set highlight on search
+opt.writebackup = false       -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
+opt.number = true             -- Make line numbers default
+opt.expandtab = true          -- convert tabs to spaces
+opt.mouse = 'a'               -- Enable mouse mode
+opt.clipboard = 'unnamedplus' -- Sync clipboard between OS and Neovim.
+opt.breakindent = true        -- Enable break indent
+opt.undofile = true           -- Save undo history
+opt.ignorecase = true         -- Case insensitive searching UNLESS /C or capital in search
+opt.smartcase = true
+opt.shiftwidth = 2            -- the number of spaces inserted for each indentation
+opt.tabstop = 2               -- insert 2 spaces for a tab
+opt.cursorline = true         -- highlight the current line
+opt.relativenumber = true     -- set relative numbered lines
+opt.scrolloff = 8
+opt.sidescrolloff = 8
+opt.guifont = "FiraCode Nerd Font"
 
 -- Decrease update time
-vim.o.updatetime = 250
-vim.o.timeout = true
-vim.o.timeoutlen = 300
+opt.updatetime = 250
+opt.timeout = true
+opt.timeoutlen = 300
 
-vim.o.completeopt = 'menuone,noselect' -- Set completeopt to have a better completion experience
-vim.o.termguicolors = true -- NOTE: You should make sure your terminal supports this
+opt.completeopt = 'menuone,noselect' -- Set completeopt to have a better completion experience
+opt.termguicolors = true             -- NOTE: You should make sure your terminal supports this
 
 -- ==================================================================== --
 --                          Keymaps                                     --
@@ -79,7 +82,7 @@ keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 
 -- Insert --
--- Press jk fast to exit insert mode 
+-- Press jk fast to exit insert mode
 keymap("i", "jk", "<ESC>", opts)
 keymap("i", "kj", "<ESC>", opts)
 
@@ -100,7 +103,7 @@ keymap("n", "<leader>v", ":vertical split<cr>", {
 keymap("n", "<leader>c", "<C-w>q>", {
     desc = "Close Split"
 })
--- Close all Splits 
+-- Close all Splits
 keymap("n", "<leader>a", "<C-w>o>", {
     desc = "Close all Splits"
 })
@@ -183,8 +186,8 @@ vim.g.loaded_netrwPlugin = 1
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
     vim.fn
-        .system {'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable', -- latest stable release
-                 lazypath}
+        .system { 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable', -- latest stable release
+            lazypath }
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -193,97 +196,104 @@ vim.opt.rtp:prepend(lazypath)
 -- ==================================================================== --
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
-require('lazy').setup({ -- Git related plugins
-'tpope/vim-fugitive', -- Use Git from neovim with :Git
-'tpope/vim-rhubarb', -- Same, but for GitHub
-'numToStr/Comment.nvim', -- Comment code with shortcuts
-'JoosepAlviste/nvim-ts-context-commentstring', -- Change comment type for JS files
-'akinsho/bufferline.nvim', -- Top bar for buffers (Buffer = file loaded in memory)
-'moll/vim-bbye', -- Bdelete command
-'akinsho/toggleterm.nvim', -- Toggle a terminal
-{ -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-
-    dependencies = { -- Automatically install LSPs to stdpath for neovim
-    'williamboman/mason.nvim', 'williamboman/mason-lspconfig.nvim', {
-        'j-hui/fidget.nvim',
-        opts = {}
-    }, 'folke/neodev.nvim'}
-}, { -- Autocompletion / Snippets
+require('lazy').setup({                            -- Git related plugins
+    'tpope/vim-fugitive',                          -- Use Git from neovim with :Git
+    'tpope/vim-rhubarb',                           -- Same, but for GitHub
+    'numToStr/Comment.nvim',                       -- Comment code with shortcuts
+    'JoosepAlviste/nvim-ts-context-commentstring', -- Change comment type for JS files
+    'akinsho/bufferline.nvim',                     -- Top bar for buffers (Buffer = file loaded in memory)
+    'moll/vim-bbye',                               -- Bdelete command
+    'akinsho/toggleterm.nvim',                     -- Toggle a terminal
+    {
+        -- LSP Configuration & Plugins
+        'neovim/nvim-lspconfig',
+        dependencies = { -- Automatically install LSPs to stdpath for neovim
+            'williamboman/mason.nvim', 'williamboman/mason-lspconfig.nvim', {
+            'j-hui/fidget.nvim',
+            opts = {}
+        }, 'folke/neodev.nvim' }
+    }, {
+    -- Autocompletion / Snippets
     'hrsh7th/nvim-cmp',
-
-    dependencies = {'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline', 'hrsh7th/cmp-nvim-lsp',
-                    'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets'}
+    dependencies = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline', 'hrsh7th/cmp-nvim-lsp',
+        'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' }
 }, -- Shortcuts sheat sheet when starting a key sequence
-{
-    'folke/which-key.nvim',
-    opts = {}
-}, {
-    'glepnir/dashboard-nvim',
-    event = 'VimEnter',
-    config = function()
-        require('dashboard').setup {
-            theme = 'doom',
-            config = {
-                header = {'', '', '', '', '', '', '',
-                          '███╗   ██╗███████╗ ██████╗ ██████╗ ██████╗ ██╗███████╗███╗   ███╗',
-                          '████╗  ██║██╔════╝██╔═══██╗██╔══██╗██╔══██╗██║██╔════╝████╗ ████║',
-                          '██╔██╗ ██║█████╗  ██║   ██║██████╔╝██████╔╝██║███████╗██╔████╔██║',
-                          '██║╚██╗██║██╔══╝  ██║   ██║██╔═══╝ ██╔══██╗██║╚════██║██║╚██╔╝██║',
-                          '██║ ╚████║███████╗╚██████╔╝██║     ██║  ██║██║███████║██║ ╚═╝ ██║',
-                          '╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚═╝     ╚═╝',
-                          '', '', '', '', ''},
+    {
+        'folke/which-key.nvim',
+        opts = {}
+    },
+    {
+        'glepnir/dashboard-nvim', -- Home Screen
+        event = 'VimEnter',
+        config = function()
+            require('dashboard').setup {
+                theme = 'doom',
+                config = {
+                    header = { '', '', '', '', '', '', '',
+                        '███╗   ██╗███████╗ ██████╗ ██████╗ ██████╗ ██╗███████╗███╗   ███╗',
+                        '████╗  ██║██╔════╝██╔═══██╗██╔══██╗██╔══██╗██║██╔════╝████╗ ████║',
+                        '██╔██╗ ██║█████╗  ██║   ██║██████╔╝██████╔╝██║███████╗██╔████╔██║',
+                        '██║╚██╗██║██╔══╝  ██║   ██║██╔═══╝ ██╔══██╗██║╚════██║██║╚██╔╝██║',
+                        '██║ ╚████║███████╗╚██████╔╝██║     ██║  ██║██║███████║██║ ╚═╝ ██║',
+                        '╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚═╝     ╚═╝',
+                        '', '', '',
+                        '',
+                        '' },
+                    center = { {
+                        icon = ' ',
+                        icon_hl = 'Title',
+                        desc = 'Find File',
+                        desc_hl = 'String',
+                        key = 'b',
+                        keymap = 'SPC f f',
+                        key_hl = 'Number',
+                        action = 'lua print(2)'
+                    }, {
+                        icon = ' ',
+                        desc = 'Find Dotfiles',
+                        key = 'f',
+                        keymap = 'SPC f d',
+                        action = 'lua print(3)'
+                    } },
+                    footer = { '💫 github.com/RevenMaster996/NeoPrism' }
+                }
+            }
+        end,
+        dependencies = { 'nvim-tree/nvim-web-devicons' }
+    },
 
-                center = {{
-                    icon = ' ',
-                    icon_hl = 'Title',
-                    desc = 'Find File',
-                    desc_hl = 'String',
-                    key = 'b',
-                    keymap = 'SPC f f',
-                    key_hl = 'Number',
-                    action = 'lua print(2)'
-                }, {
-                    icon = ' ',
-                    desc = 'Find Dotfiles',
-                    key = 'f',
-                    keymap = 'SPC f d',
-                    action = 'lua print(3)'
-                }},
-                footer = {{'💫 github.com/RevenMaster996/NeoPrism'}}
+    {
+        -- Adds git releated signs to the gutter, as well as utilities for managing changes
+        'lewis6991/gitsigns.nvim',
+        opts = {
+            -- See `:help gitsigns.txt`
+            signs = {
+                add = {
+                    text = '+'
+                },
+                change = {
+                    text = '~'
+                },
+                delete = {
+                    text = '_'
+                },
+                topdelete = {
+                    text = '‾'
+                },
+                changedelete = {
+                    text = '~'
+                }
             }
         }
-    end,
-    dependencies = {{'nvim-tree/nvim-web-devicons'}}
-}, { -- Adds git releated signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-        -- See `:help gitsigns.txt`
-        signs = {
-            add = {
-                text = '+'
-            },
-            change = {
-                text = '~'
-            },
-            delete = {
-                text = '_'
-            },
-            topdelete = {
-                text = '‾'
-            },
-            changedelete = {
-                text = '~'
-            }
-        }
-    }
-}, { -- Color Theme
+    }, {
+    -- Color Theme
     'Mofiqul/dracula.nvim',
     priority = 1000,
     config = function()
         vim.cmd.colorscheme 'dracula'
     end
-}, { -- Set lualine as statusline
+}, {
+    -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
@@ -313,38 +323,38 @@ require('lazy').setup({ -- Git related plugins
             }
         },
         sections = {
-            lualine_a = {'mode'},
-            lualine_b = {'branch', 'diff', 'diagnostics'},
-            lualine_c = {'filename'},
-            lualine_x = {'encoding', 'fileformat', 'filetype'},
-            lualine_y = {'progress'},
-            lualine_z = {'location'}
+            lualine_a = { 'mode' },
+            lualine_b = { 'branch', 'diff', 'diagnostics' },
+            lualine_c = { 'filename' },
+            lualine_x = { 'encoding', 'fileformat', 'filetype' },
+            lualine_y = { 'progress' },
+            lualine_z = { 'location' }
         },
         inactive_sections = {
             lualine_a = {},
             lualine_b = {},
-            lualine_c = {'filename'},
-            lualine_x = {'location'},
+            lualine_c = { 'filename' },
+            lualine_x = { 'location' },
             lualine_y = {},
             lualine_z = {}
         },
         tabline = {},
         winbar = {},
         inactive_winbar = {},
-        extensions = {'fugitive', 'man', 'nvim-tree', 'toggleterm'}
+        extensions = { 'fugitive', 'man', 'nvim-tree', 'toggleterm' }
     }
-}, { -- Add indentation guides even on blank lines
+}, {
+    -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
-
     opts = {
         char = '┊',
         show_trailing_blankline_indent = false
     }
 }, -- "gcc" or "gc" to comment visual regions/lines and "gb" to block comment
-{
-    'numToStr/Comment.nvim',
-    opts = {}
-}, {
+    {
+        'numToStr/Comment.nvim',
+        opts = {}
+    }, {
     'windwp/nvim-autopairs',
     opts = {}
 }, {
@@ -358,41 +368,41 @@ require('lazy').setup({ -- Git related plugins
 }, {
     'nvim-telescope/telescope.nvim',
     version = '*',
-    dependencies = {'nvim-lua/plenary.nvim'}
+    dependencies = { 'nvim-lua/plenary.nvim' }
 }, {
     'nvim-telescope/telescope-fzf-native.nvim',
-
     -- Verifies if the plugin can be installed safely without compiling errors
     build = 'make',
     cond = function()
         return vim.fn.executable 'make' == 1
     end
-}, { -- Highlight, edit, and navigate code
+}, {
+    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    dependencies = {'nvim-treesitter/nvim-treesitter-textobjects'},
+    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
     config = function()
         pcall(require('nvim-treesitter.install').update {
             with_sync = true
         })
         opts = {
-            ensure_installed = {'c', 'rust', 'lua', 'vim', 'bash', 'markdown'},
+            ensure_installed = { 'c', 'rust', 'lua', 'vim', 'bash', 'markdown' },
             sync_install = false,
-            ignore_install = {""}, -- List of parsers to ignore installing
+            ignore_install = { "" }, -- List of parsers to ignore installing
             autopairs = {
                 enable = true
             },
             highlight = {
-                enable = true, -- false will disable the whole extension
-                disable = {""}, -- list of language that will be disabled
+                enable = true,    -- false will disable the whole extension
+                disable = { "" }, -- list of language that will be disabled
                 additional_vim_regex_highlighting = true
             },
             indent = {
                 enable = true,
-                disable = {"yaml"}
+                disable = { "yaml" }
             }
         }
     end
-}}, {})
+} }, {})
 
 -- ==================================================================== --
 --                          Plugins configuration                       --
@@ -411,35 +421,26 @@ local actions = require "telescope.actions"
 
 telescope.setup {
     defaults = {
-
         prompt_prefix = " ",
         selection_caret = " ",
-        path_display = {"smart"},
-
+        path_display = { "smart" },
         mappings = {
             i = {
                 ["<C-n>"] = actions.cycle_history_next,
                 ["<C-p>"] = actions.cycle_history_prev,
-
                 ["<C-j>"] = actions.move_selection_next,
                 ["<C-k>"] = actions.move_selection_previous,
-
                 ["<C-c>"] = actions.close,
-
                 ["<Down>"] = actions.move_selection_next,
                 ["<Up>"] = actions.move_selection_previous,
-
                 ["<CR>"] = actions.select_default,
                 ["<C-x>"] = actions.select_horizontal,
                 ["<C-v>"] = actions.select_vertical,
                 ["<C-t>"] = actions.select_tab,
-
                 ["<C-u>"] = actions.preview_scrolling_up,
                 ["<C-d>"] = actions.preview_scrolling_down,
-
                 ["<PageUp>"] = actions.results_scrolling_up,
                 ["<PageDown>"] = actions.results_scrolling_down,
-
                 ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
                 ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
                 ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
@@ -447,36 +448,29 @@ telescope.setup {
                 ["<C-l>"] = actions.complete_tag,
                 ["<C-_>"] = actions.which_key -- keys from pressing <C-/>
             },
-
             n = {
                 ["<esc>"] = actions.close,
                 ["<CR>"] = actions.select_default,
                 ["<C-x>"] = actions.select_horizontal,
                 ["<C-v>"] = actions.select_vertical,
                 ["<C-t>"] = actions.select_tab,
-
                 ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
                 ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
                 ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
                 ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-
                 ["j"] = actions.move_selection_next,
                 ["k"] = actions.move_selection_previous,
                 ["H"] = actions.move_to_top,
                 ["M"] = actions.move_to_middle,
                 ["L"] = actions.move_to_bottom,
-
                 ["<Down>"] = actions.move_selection_next,
                 ["<Up>"] = actions.move_selection_previous,
                 ["gg"] = actions.move_to_top,
                 ["G"] = actions.move_to_bottom,
-
                 ["<C-u>"] = actions.preview_scrolling_up,
                 ["<C-d>"] = actions.preview_scrolling_down,
-
                 ["<PageUp>"] = actions.results_scrolling_up,
                 ["<PageDown>"] = actions.results_scrolling_down,
-
                 ["?"] = actions.which_key
             }
         }
@@ -528,48 +522,43 @@ require("bufferline").setup {
         right_mouse_command = "Bdelete! %d",
         left_mouse_command = "buffer %d",
         middle_mouse_command = nil,
-
         indicator = {
             style = 'icon',
             icon = '|' -- If style it's an icon this can be used as a default
         },
-
         buffer_close_icon = "",
         modified_icon = "●",
         close_icon = "",
         left_trunc_marker = "",
         right_trunc_marker = "",
-
         max_name_length = 30,
         max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
         tab_size = 21,
-        diagnostics = false, -- | "nvim_lsp" | "coc",
+        diagnostics = false,    -- | "nvim_lsp" | "coc",
         diagnostics_update_in_insert = false,
-
-        offsets = {{
+        offsets = { {
             filetype = "NvimTree",
             text = "File Explorer",
             text_align = "center",
             separator = true
-        }},
-
+        } },
         show_buffer_icons = true,
         show_buffer_close_icons = true,
         show_close_icon = true,
-        ensure_installed = {'c', 'rust', 'lua', 'vim', 'bash', 'markdown'},
+        ensure_installed = { 'c', 'rust', 'lua', 'vim', 'bash', 'markdown' },
         sync_install = false,
-        ignore_install = {""}, -- List of parsers to ignore installing
+        ignore_install = { "" }, -- List of parsers to ignore installing
         autopairs = {
             enable = true
         },
         highlight = {
-            enable = true, -- false will disable the whole extension
-            disable = {""}, -- list of language that will be disabled
+            enable = true,    -- false will disable the whole extension
+            disable = { "" }, -- list of language that will be disabled
             additional_vim_regex_highlighting = true
         },
         indent = {
             enable = true,
-            disable = {"yaml"}
+            disable = { "yaml" }
         },
         show_tab_indicators = true,
         persist_buffer_sort = true, -- whether or not custom sorted buffers should persist

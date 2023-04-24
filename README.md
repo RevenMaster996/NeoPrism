@@ -5,8 +5,15 @@
 ## Dev Notes
 
 ### Nvim Plugin Manager:
+
 - XXXXX
 
 ### Nvim Plugins:
+
 - XXXXX
 - XXXXX
+
+## How to run the windows script:
+
+- Set-ExecutionPolicy unrestricted (Run on powershell as admin)
+- run the installWindows.ps1 script as admin.
