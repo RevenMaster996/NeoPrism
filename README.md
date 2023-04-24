@@ -1,17 +1,10 @@
 # Nvim
 
-### WARNING: This repository is under heavy maintenance. Do NOT run in production.
-
 ## Dev Notes
 
 ### Nvim Plugin Manager:
 
-- XXXXX
-
-### Nvim Plugins:
-
-- XXXXX
-- XXXXX
+- Lazy.nvim
 
 ## How to run the windows script:
 
@@ -20,3 +13,11 @@
 
 ## Running NeoPrism GUI:
 It is recommended to use Neovide as a GUI wrapper.
+
+## How to install linux
+- sudo apt install neovide (or another package manager)
+- Run linuxInstall
+
+## How to install Windows
+- install neovim
+- Run windowsInstall.ps1
