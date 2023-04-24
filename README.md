@@ -21,3 +21,6 @@ It is recommended to use Neovide as a GUI wrapper.
 ## How to install Windows
 - install neovim
 - Run windowsInstall.ps1
+
+EDITOR OFICIAL DO XPRISM
+[link para o XPrism]
