@@ -196,10 +196,8 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({ -- Git related plugins
 'tpope/vim-fugitive', -- Use Git from neovim with :Git
 'tpope/vim-rhubarb', -- Same, but for GitHub
-'windwp/nvim-autopairs', -- Open and close "(), {}, etc." automatically.
 'numToStr/Comment.nvim', -- Comment code with shortcuts
 'JoosepAlviste/nvim-ts-context-commentstring', -- Change comment type for JS files
-'kyazdani42/nvim-tree.lua', -- Custom File Explorer
 'akinsho/bufferline.nvim', -- Top bar for buffers (Buffer = file loaded in memory)
 'moll/vim-bbye', -- Bdelete command
 'akinsho/toggleterm.nvim', -- Toggle a terminal
@@ -239,7 +237,7 @@ require('lazy').setup({ -- Git related plugins
                 center = {{
                     icon = ' ',
                     icon_hl = 'Title',
-                    desc = 'Find File           ',
+                    desc = 'Find File',
                     desc_hl = 'String',
                     key = 'b',
                     keymap = 'SPC f f',
@@ -346,8 +344,18 @@ require('lazy').setup({ -- Git related plugins
 {
     'numToStr/Comment.nvim',
     opts = {}
-}, -- Fuzzy Finder (files, lsp, etc)
-{
+}, {
+    'windwp/nvim-autopairs',
+    opts = {}
+}, {
+    'kyazdani42/nvim-tree.lua',
+    opts = {
+        view = {
+            width = 30,
+            side = "right"
+        }
+    }
+}, {
     'nvim-telescope/telescope.nvim',
     version = '*',
     dependencies = {'nvim-lua/plenary.nvim'}
@@ -366,6 +374,23 @@ require('lazy').setup({ -- Git related plugins
         pcall(require('nvim-treesitter.install').update {
             with_sync = true
         })
+        opts = {
+            ensure_installed = {'c', 'rust', 'lua', 'vim', 'bash', 'markdown'},
+            sync_install = false,
+            ignore_install = {""}, -- List of parsers to ignore installing
+            autopairs = {
+                enable = true
+            },
+            highlight = {
+                enable = true, -- false will disable the whole extension
+                disable = {""}, -- list of language that will be disabled
+                additional_vim_regex_highlighting = true
+            },
+            indent = {
+                enable = true,
+                disable = {"yaml"}
+            }
+        }
     end
 }}, {})
 
@@ -463,34 +488,34 @@ telescope.setup {
 -- ==================================================================== --
 
 -- See `:help nvim-treesitter`
-require('nvim-treesitter.configs').setup {
-    ensure_installed = {'c', 'rust', 'lua', 'vim', 'bash', 'markdown'},
-    sync_install = false,
-    ignore_install = {""}, -- List of parsers to ignore installing
-    autopairs = {
-        enable = true
-    },
-    highlight = {
-        enable = true, -- false will disable the whole extension
-        disable = {""}, -- list of language that will be disabled
-        additional_vim_regex_highlighting = true
-    },
-    indent = {
-        enable = true,
-        disable = {"yaml"}
-    }
-}
+-- require('nvim-treesitter.configs').setup {
+--     ensure_installed = {'c', 'rust', 'lua', 'vim', 'bash', 'markdown'},
+--     sync_install = false,
+--     ignore_install = {""}, -- List of parsers to ignore installing
+--     autopairs = {
+--         enable = true
+--     },
+--     highlight = {
+--         enable = true, -- false will disable the whole extension
+--         disable = {""}, -- list of language that will be disabled
+--         additional_vim_regex_highlighting = true
+--     },
+--     indent = {
+--         enable = true,
+--         disable = {"yaml"}
+--     }
+-- }
 
--- ==================================================================== --
---                          Nvim-tree                                   --
--- ==================================================================== --
+-- -- ==================================================================== --
+-- --                          Nvim-tree                                   --
+-- -- ==================================================================== --
 
-require("nvim-tree").setup { -- BEGIN_DEFAULT_OPTS
-    view = {
-        width = 30,
-        side = "right"
-    }
-}
+-- require("nvim-tree").setup { -- BEGIN_DEFAULT_OPTS
+--     view = {
+--         width = 30,
+--         side = "right"
+--     }
+-- }
 
 -- ==================================================================== --
 --                         Bufferline                                   --
@@ -545,26 +570,20 @@ require("bufferline").setup {
         indent = {
             enable = true,
             disable = {"yaml"}
-        }
-    },
-    show_tab_indicators = true,
-    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
-    -- can also be a table containing 2 custom separators
-    -- [focused and unfocused]. eg: { '|', '|' }
-    separator_style = "thin", -- | "thick" | "thin" | { 'any', 'any' },
-    enforce_regular_tabs = true,
-    always_show_bufferline = true
-    -- sort_by = 'id' | 'extension' | 'relative_directory' | 'directory' | 'tabs' | function(buffer_a, buffer_b)
-    --   -- add custom logic
-    --   return buffer_a.modified > buffer_b.modified
-    -- end
+        },
+        show_tab_indicators = true,
+        persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
+        -- can also be a table containing 2 custom separators
+        -- [focused and unfocused]. eg: { '|', '|' }
+        separator_style = "thin", -- | "thick" | "thin" | { 'any', 'any' },
+        enforce_regular_tabs = true,
+        always_show_bufferline = true
+        -- sort_by = 'id' | 'extension' | 'relative_directory' | 'directory' | 'tabs' | function(buffer_a, buffer_b)
+        --   -- add custom logic
+        --   return buffer_a.modified > buffer_b.modified
+        -- end
+    }
 }
-
--- ==================================================================== --
---                          Autopairs                                   --
--- ==================================================================== --
-
-require("nvim-autopairs").setup {}
 
 -- ==================================================================== --
 --                          Toggle term                                 --
