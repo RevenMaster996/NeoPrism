@@ -201,9 +201,7 @@ require('lazy').setup({                            -- Git related plugins
     'tpope/vim-rhubarb',                           -- Same, but for GitHub
     'numToStr/Comment.nvim',                       -- Comment code with shortcuts
     'JoosepAlviste/nvim-ts-context-commentstring', -- Change comment type for JS files
-    'akinsho/bufferline.nvim',                     -- Top bar for buffers (Buffer = file loaded in memory)
     'moll/vim-bbye',                               -- Bdelete command
-    'akinsho/toggleterm.nvim',                     -- Toggle a terminal
     {
         -- LSP Configuration & Plugins
         'neovim/nvim-lspconfig',
@@ -212,12 +210,13 @@ require('lazy').setup({                            -- Git related plugins
             'j-hui/fidget.nvim',
             opts = {}
         }, 'folke/neodev.nvim' }
-    }, {
-    -- Autocompletion / Snippets
-    'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline', 'hrsh7th/cmp-nvim-lsp',
-        'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' }
-}, -- Shortcuts sheat sheet when starting a key sequence
+    },
+    {
+        -- Autocompletion / Snippets
+        'hrsh7th/nvim-cmp',
+        dependencies = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline', 'hrsh7th/cmp-nvim-lsp',
+            'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' }
+    },
     {
         'folke/which-key.nvim',
         opts = {}
@@ -402,15 +401,99 @@ require('lazy').setup({                            -- Git related plugins
             }
         }
     end
-} }, {})
-
--- ==================================================================== --
---                          Plugins configuration                       --
--- ==================================================================== --
+},
+    {
+        'akinsho/toggleterm.nvim',
+        opts = {
+            size = 10,
+            open_mapping = [[<c-t>]], -- CTRL + t to open term
+            hide_numbers = true,
+            shade_filetypes = {},
+            shade_terminals = true,
+            shading_factor = 2,
+            start_in_insert = true,
+            insert_mappings = true,
+            persist_size = true,
+            direction = "horizontal", -- float, vertical...
+            close_on_exit = true,
+            shell = vim.o.shell,
+            float_opts = {
+                border = "curved",
+                winblend = 0,
+                highlights = {
+                    border = "Normal",
+                    background = "Normal"
+                }
+            }
+        }
+    },
+    {
+        'akinsho/bufferline.nvim',
+        opts = {
+            options = {
+                numbers = "none",
+                close_command = "Bdelete! %d",
+                right_mouse_command = "Bdelete! %d",
+                left_mouse_command = "buffer %d",
+                middle_mouse_command = nil,
+                indicator = {
+                    style = 'icon',
+                    icon = '|' -- If style it's an icon this can be used as a default
+                },
+                buffer_close_icon = "",
+                modified_icon = "●",
+                close_icon = "",
+                left_trunc_marker = "",
+                right_trunc_marker = "",
+                max_name_length = 30,
+                max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
+                tab_size = 21,
+                diagnostics = false,    -- | "nvim_lsp" | "coc",
+                diagnostics_update_in_insert = false,
+                offsets = { {
+                    filetype = "NvimTree",
+                    text = "File Explorer",
+                    text_align = "center",
+                    separator = true
+                } },
+                show_buffer_icons = true,
+                show_buffer_close_icons = true,
+                show_close_icon = true,
+                ensure_installed = { 'c', 'rust', 'lua', 'vim', 'bash', 'markdown' },
+                sync_install = false,
+                ignore_install = { "" }, -- List of parsers to ignore installing
+                autopairs = {
+                    enable = true
+                },
+                highlight = {
+                    enable = true,    -- false will disable the whole extension
+                    disable = { "" }, -- list of language that will be disabled
+                    additional_vim_regex_highlighting = true
+                },
+                indent = {
+                    enable = true,
+                    disable = { "yaml" }
+                },
+                show_tab_indicators = true,
+                persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
+                -- can also be a table containing 2 custom separators
+                -- [focused and unfocused]. eg: { '|', '|' }
+                separator_style = "thin", -- | "thick" | "thin" | { 'any', 'any' },
+                enforce_regular_tabs = true,
+                always_show_bufferline = true
+                -- sort_by = 'id' | 'extension' | 'relative_directory' | 'directory' | 'tabs' | function(buffer_a, buffer_b)
+                --   -- add custom logic
+                --   return buffer_a.modified > buffer_b.modified
+                -- end
+            }
+        }
+    }
+}, {})
 
 -- ==================================================================== --
 --                          Telescope                                   --
 -- ==================================================================== --
+-- Telescope is configured below to allow for more complex customization.
 
 local status_ok, telescope = pcall(require, "telescope")
 if not status_ok then
@@ -478,130 +561,188 @@ telescope.setup {
 }
 
 -- ==================================================================== --
---                          Treesitter                                  --
+--                          LSP Configurations                          --
+--         Langauge Server - Error checking / Custom lang features      --
 -- ==================================================================== --
 
--- See `:help nvim-treesitter`
--- require('nvim-treesitter.configs').setup {
---     ensure_installed = {'c', 'rust', 'lua', 'vim', 'bash', 'markdown'},
---     sync_install = false,
---     ignore_install = {""}, -- List of parsers to ignore installing
---     autopairs = {
---         enable = true
---     },
---     highlight = {
---         enable = true, -- false will disable the whole extension
---         disable = {""}, -- list of language that will be disabled
---         additional_vim_regex_highlighting = true
---     },
---     indent = {
---         enable = true,
---         disable = {"yaml"}
---     }
--- }
+-- Install lang servers:
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 
--- -- ==================================================================== --
--- --                          Nvim-tree                                   --
--- -- ==================================================================== --
+local servers = {
+    "lua_ls",
+    "rust_analyzer",
+    "clangd"
+}
 
--- require("nvim-tree").setup { -- BEGIN_DEFAULT_OPTS
---     view = {
---         width = 30,
---         side = "right"
---     }
--- }
-
--- ==================================================================== --
---                         Bufferline                                   --
--- ==================================================================== --
-
-require("bufferline").setup {
-    options = {
-        numbers = "none",
-        close_command = "Bdelete! %d",
-        right_mouse_command = "Bdelete! %d",
-        left_mouse_command = "buffer %d",
-        middle_mouse_command = nil,
-        indicator = {
-            style = 'icon',
-            icon = '|' -- If style it's an icon this can be used as a default
-        },
-        buffer_close_icon = "",
-        modified_icon = "●",
-        close_icon = "",
-        left_trunc_marker = "",
-        right_trunc_marker = "",
-        max_name_length = 30,
-        max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
-        tab_size = 21,
-        diagnostics = false,    -- | "nvim_lsp" | "coc",
-        diagnostics_update_in_insert = false,
-        offsets = { {
-            filetype = "NvimTree",
-            text = "File Explorer",
-            text_align = "center",
-            separator = true
-        } },
-        show_buffer_icons = true,
-        show_buffer_close_icons = true,
-        show_close_icon = true,
-        ensure_installed = { 'c', 'rust', 'lua', 'vim', 'bash', 'markdown' },
-        sync_install = false,
-        ignore_install = { "" }, -- List of parsers to ignore installing
-        autopairs = {
-            enable = true
-        },
-        highlight = {
-            enable = true,    -- false will disable the whole extension
-            disable = { "" }, -- list of language that will be disabled
-            additional_vim_regex_highlighting = true
-        },
-        indent = {
-            enable = true,
-            disable = { "yaml" }
-        },
-        show_tab_indicators = true,
-        persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
-        -- can also be a table containing 2 custom separators
-        -- [focused and unfocused]. eg: { '|', '|' }
-        separator_style = "thin", -- | "thick" | "thin" | { 'any', 'any' },
-        enforce_regular_tabs = true,
-        always_show_bufferline = true
-        -- sort_by = 'id' | 'extension' | 'relative_directory' | 'directory' | 'tabs' | function(buffer_a, buffer_b)
-        --   -- add custom logic
-        --   return buffer_a.modified > buffer_b.modified
-        -- end
+local settings = {
+    max_concurrent_installers = 2,
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+        }
     }
 }
 
--- ==================================================================== --
---                          Toggle term                                 --
--- ==================================================================== --
+require("mason").setup(settings)
+require("mason-lspconfig").setup({
+    ensure_installed = servers,
+    automatic_installation = true,
+})
 
-local status_ok, toggleterm = pcall(require, "toggleterm")
-if not status_ok then
-    return
+local on_attach = function(_, _) -- MUDAR ESTA DESGRAÇA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! OLHA PARA MIM ESTOU AQUI !!!!!!!!!!!!!!!!!!!!!!
+    keymap('n', '<leader>rn', vim.lsp.buf.rename, { desc = "Rename all definitions" })
+    keymap('n', '<Leader>ca', vim.lsp.buf.code_action, { desc = "Code Actions" })
+
+    keymap('n', 'gd', vim.lsp.buf.definition, { desc = "Jump to the definition of the symbol under the cursor" })
+    keymap('n', 'gi', vim.lsp.buf.implementation, { desc = "Implementation" })
+    keymap('n', 'gr', require('telescope.builtin').lsp_references, { desc = "References of functions" })
+    keymap('n', '<leader>k', vim.lsp.buf.hover, { desc = "Documentation" })
 end
 
-toggleterm.setup({
-    size = 10,
-    open_mapping = [[<c-t>]], -- CTRL + t to open term
-    hide_numbers = true,
-    shade_filetypes = {},
-    shade_terminals = true,
-    shading_factor = 2,
-    start_in_insert = true,
-    insert_mappings = true,
-    persist_size = true,
-    direction = "horizontal", -- float, vertical...
-    close_on_exit = true,
-    shell = vim.o.shell,
-    float_opts = {
-        border = "curved",
-        winblend = 0,
-        highlights = {
-            border = "Normal",
-            background = "Normal"
+for _, server in ipairs(servers) do
+    require("lspconfig")[server].setup({
+        on_attach = on_attach,
+    })
+end
+
+require("lspconfig").lua_ls.setup {
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { 'vim' },
+            }
         }
     }
-})
+}
+
+
+-- ==================================================================== --
+--                          CMP Configuration                           --
+--                    Autocompletion and Snippets                       --
+-- ==================================================================== --
+
+local cmp = require 'cmp'
+local luasnip = require 'luasnip'
+
+require("luasnip/loaders/from_vscode").lazy_load()
+
+local check_backspace = function()
+    local col = vim.fn.col "." - 1
+    return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
+end
+
+--   פּ ﯟ   some other good icons
+local kind_icons = {
+    Text = "",
+    Method = "m",
+    Function = "",
+    Constructor = "",
+    Field = "",
+    Variable = "",
+    Class = "",
+    Interface = "",
+    Module = "",
+    Property = "",
+    Unit = "",
+    Value = "",
+    Enum = "",
+    Keyword = "",
+    Snippet = "",
+    Color = "",
+    File = "",
+    Reference = "",
+    Folder = "",
+    EnumMember = "",
+    Constant = "",
+    Struct = "",
+    Event = "",
+    Operator = "",
+    TypeParameter = "",
+}
+-- find more here: https://www.nerdfonts.com/cheat-sheet
+
+--luasnip.config.setup {}
+
+cmp.setup {
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body) -- For `luasnip` users.
+        end,
+    },
+    mapping = {
+        ["<C-k>"] = cmp.mapping.select_prev_item(),
+        ["<C-j>"] = cmp.mapping.select_next_item(),
+        ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+        ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+        ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+        ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+        ["<C-e>"] = cmp.mapping {
+            i = cmp.mapping.abort(),
+            c = cmp.mapping.close(),
+        },
+        -- Accept currently selected item. If none selected, `select` first item.
+        -- Set `select` to `false` to only confirm explicitly selected items.
+        ["<CR>"] = cmp.mapping.confirm { select = true },
+        ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif luasnip.expandable() then
+                luasnip.expand()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            elseif check_backspace() then
+                fallback()
+            else
+                fallback()
+            end
+        end, {
+            "i",
+            "s",
+        }),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end, {
+            "i",
+            "s",
+        }),
+    },
+    formatting = {
+        fields = { "kind", "abbr", "menu" },
+        format = function(entry, vim_item)
+            -- Kind icons
+            vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+            -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+            vim_item.menu = ({
+                luasnip = "[Snippet]",
+                buffer = "[Buffer]",
+                path = "[Path]",
+            })[entry.source.name]
+            return vim_item
+        end,
+    },
+    sources = {
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+        { name = "buffer" },
+        { name = "path" },
+    },
+    confirm_opts = {
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = false,
+    },
+    window = {
+        documentation = cmp.config.window.bordered(),
+    },
+    experimental = {
+        ghost_text = false,
+        native_menu = false,
+    },
+}
