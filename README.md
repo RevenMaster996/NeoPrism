@@ -17,3 +17,6 @@
 
 - Set-ExecutionPolicy unrestricted (Run on powershell as admin)
 - run the installWindows.ps1 script as admin.
+
+## Running NeoPrism GUI:
+It is recommended to use Neovide as a GUI wrapper.
