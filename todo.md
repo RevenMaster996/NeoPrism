@@ -6,7 +6,7 @@
 - [x] Config plugins
 - [ ] Keymaps parte 2
 - [ ] Atualizar e melhorar o site
-- [ ] Testar
+- [x] Testar
 - [ ] Arranjar uma vítima para testar tmb
 - [ ] E viveram felizes para sempre
 - [ ] !!!!!!!!!!!!!!!! nvim tree criar ficheiros, apagar, renomear.
