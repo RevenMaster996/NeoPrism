@@ -61,8 +61,7 @@ vim.g.maplocalleader = " "
 --   normal_mode = "n",
 --   insert_mode = "i",
 --   visual_mode = "v",
---   command_mode = "c",
---   visual_block_mode = "Fn + q",
+--   command_mode = ":;/",
 
 -- Normal --
 -- Switch between buffers
