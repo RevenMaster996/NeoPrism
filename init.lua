@@ -258,6 +258,7 @@ require('lazy').setup({                            -- Git related plugins
                 },
                     footer = { '💫 github.com/RevenMaster996/NeoPrism' }
                 }
+            }
         end,
         dependencies = { 'nvim-tree/nvim-web-devicons' }
     },
